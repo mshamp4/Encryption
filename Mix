@@ -1,0 +1,204 @@
+package project4;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Mix implements IMix {
+
+	/** Linked list of characters representing a message (String) */ 
+	private MyLinkedList message;
+
+	// this will only work for Linux and it is not cross platform
+	private final String[] MANUAL = {"gnome-terminal", "-e", "man encryption"};
+
+	public Mix () {
+		message = new MyLinkedList();
+	}
+
+	public static void main(String[] args) {
+		Mix list = new Mix();
+		list.encrypt();
+	}
+
+	public void encrypt() {
+		System.out.print("Enter a message to mix it up!\n\t");
+
+		Scanner sc = new Scanner(System.in);
+		String input = sc.nextLine().replaceAll("\\s+", " ");
+
+		while (input.trim().isEmpty()) { 
+			System.out.print("You must enter a secret message!\n\t");
+			input = sc.nextLine();
+		}
+
+		setInitialMessage(input);
+		display();
+
+		while (!input.equalsIgnoreCase("q")) {
+
+			System.out.print("Command:\n\t");
+			input = sc.nextLine().trim();
+
+			if (!input.equalsIgnoreCase("q")) {
+				processCommand(input);
+				display();
+			}
+		}
+
+		sc.close();
+
+		System.out.print("Final mixed up message: " + message.toString());
+	}
+
+	public void display() {
+
+		String s = message.toString();
+		String finalMessage = "";
+		String numbers = "";
+
+		System.out.print("Message:\n\t");
+
+		for (int i = 0; i < message.getCount(); i++) {
+			numbers += i + " ";
+			String letter = s.substring(i, i + 1);
+			if (i < 10)
+				finalMessage += letter + " ";
+			else if (i < 99) 
+				finalMessage += letter + "  ";
+			else 
+				finalMessage += letter + "   ";
+		}
+
+		System.out.print(numbers);
+		System.out.print("\n\t");
+		System.out.println(finalMessage);
+	}
+
+	@Override
+	public void setInitialMessage(String message) {
+		this.message.add(message);
+	}
+
+	@Override
+	public String processCommand(String temp) {
+
+		String[] command = temp.split("\\s+");
+
+		switch (command[0]) {
+		case "a":
+			if (isValidAdd(command)) {
+				int index = Integer.parseInt(command[2]);
+				message.addAfterIndex(command[1], index);
+			}
+			break;
+		case "r":
+			if (isValidRemove(command))
+				if (!message.delete(command[1]))
+					System.out.println("Notice: No character to remove!");
+			break;
+		case "s":
+			if (isValidSave(command)) {
+				save(command[1]);
+				//	System.out.println("Save Successful!");
+			}
+			break;
+		case "c":
+			System.out.println("Cut Command");
+			break;
+		case "p":
+			System.out.println("Paste Command");
+			break;
+		case "help":
+			try {
+				new ProcessBuilder(MANUAL).start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		default: System.out.println("Command not found! Type help for more info.");
+		break;
+		}
+
+		return message.toString();
+	}
+
+	public boolean isValidAdd(String[] command) {
+
+		if (command.length < 3) {
+			System.out.println("You must enter a character and or integer!");
+			return false;
+		}
+
+		if (!Character.isDigit(command[2].charAt(0))) { 
+			System.out.println("Invalid Syntax! Type help for more info.");
+			return false;
+		}
+
+		if (command[1].length() > 1) {
+			System.out.println("You can only add one letter at a time!");
+			return false;
+		}
+
+		int checkInt = Integer.parseInt(command[2]);
+
+		if (checkInt >= message.getCount()) {
+			System.out.println("Error: Integer cannot exceed message length");
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean isValidRemove(String[] command) {
+
+		if (command.length < 2) {
+			System.out.println("You must enter a character!");
+			return false;
+		}
+
+		if (command.length > 2) {
+			System.out.println("Invalid Syntax! Type help for more info.");
+			return false;
+		}
+
+		if (command[1].length() > 1) {
+			System.out.println("You can only remove one letter at a time!");
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean isValidSave(String[] command) {
+
+		if (command.length < 2) {
+			System.out.println("You must specify a filename!");
+			return false;
+		}
+
+		if (command.length > 2) {
+			System.out.println("Invalid Syntax! Type help for more info.");
+			return false;
+		}
+
+		return true;
+	}
+
+	public void save(String fileName) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(new FileWriter
+					(fileName)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		for (String i : message.getUndoCommands()) {
+			out.println(i);
+		}
+		out.close();
+	}
+}
