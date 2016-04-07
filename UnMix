@@ -1,0 +1,110 @@
+package project4;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class UnMix implements IUnMix {
+
+	/** Linked list of characters representing a message (string) */ 
+	private MyLinkedList message;
+
+	private String fileName;
+
+	private boolean correctFile;
+
+	private ArrayList<String> redoCommands;
+
+	public UnMix() {
+		setFileName("");
+		setCorrectFile(false);
+		redoCommands = new ArrayList<String>();
+	}
+
+	public static void main(String[] args) {
+		UnMix list = new UnMix();
+		list.message = new MyLinkedList();
+		list.decrypt();
+	}
+
+	public void decrypt() {
+
+		System.out.print("Enter the name of the file:\n\t");
+
+		Scanner sc = new Scanner(System.in);
+
+		load(sc.nextLine().trim());
+
+		while (!isCorrectFile()) {
+			load(sc.nextLine().trim());
+		}
+
+		System.out.print("Enter the mixed up message:\n\t");
+		message.add(sc.nextLine()); // this messes up if there is a space 
+		sc.close();
+
+		System.out.println("Decypted message: " + UnMixUsingFile(fileName, message.toString()));
+	}
+
+	public void load(String filename) {
+
+		try{
+			Scanner fileReader = new Scanner(new File(filename));
+
+			while (fileReader.hasNextLine()) {
+				String input = fileReader.nextLine();
+				redoCommands.add(input);
+			}
+
+			fileReader.close();
+			setFileName(filename);
+			setCorrectFile(true);
+
+		} catch(Exception e) {
+			System.out.println("Error 404: File not found!");
+			System.out.print("Enter the name of the file:\n\t");
+		}	
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public boolean isCorrectFile() {
+		return correctFile;
+	}
+
+	public void setCorrectFile(boolean correctFile) {
+		this.correctFile = correctFile;
+	}
+
+	@Override
+	public String UnMixUsingFile(String filename, String mixedMessage) {
+		
+		int count = redoCommands.size() - 1;
+		while (count >= 0) {
+			
+			String[] command = redoCommands.get(count).split("\\s+");
+
+			switch(command[0]) {
+			case "a":
+				int addIndex = Integer.parseInt(command[2]);
+				message.addAtIndex(command[1], addIndex); // blows up at this line for JUnit test
+				break;
+			case "r":
+				int removeIndex = Integer.parseInt(command[2]);
+				message.deleteAfterIndex(command[1], removeIndex); // blows up at this line for JUnit test
+				break;
+			default: System.out.println("An error occured reading the file!");
+			break;
+			}
+			count--;
+		}
+
+		return message.toString();
+	}
+}
