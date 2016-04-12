@@ -183,7 +183,6 @@ public class UnMix implements IUnMix {
 						+ "file!");
 				break;
 				}
-				mixedMessage = message.toString(); // delete later
 				count--;
 			}
 			catch (IndexOutOfBoundsException e) {
