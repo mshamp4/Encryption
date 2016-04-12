@@ -1,32 +1,59 @@
 package project4;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/***********************************************************************
+ *
+ * This class creates a double linked list and undo's all of the commands to
+ * get back to the original message.
+ *
+ * @author Matthew Shampine
+ * @version 1.0
+ ***********************************************************************/
 public class UnMix implements IUnMix {
 
-	/** Linked list of characters representing a message (string) */ 
+	/** Linked list of characters representing a message (String) */ 
 	private MyLinkedList message;
 
+	/** name of file that the user is trying to open */
 	private String fileName;
 
+	/** boolean to see if there is a file that exists */
 	private boolean correctFile;
 
+	/** loads the undoCommands into an ArrayList of redoCommands */
 	private ArrayList<String> redoCommands;
 
+	/*******************************************************************
+	 * UnMix constructor that initializes all of the necessary 
+	 * fields to the appropriate values.
+	 *
+	 ******************************************************************/
 	public UnMix() {
+		message = new MyLinkedList();
 		setFileName("");
 		setCorrectFile(false);
 		redoCommands = new ArrayList<String>();
 	}
 
+	/*******************************************************************
+	 * Main method that can invoke its own methods inside the class.
+	 * 
+	 * @param args parameter used for debugging and testing purposes.
+	 ******************************************************************/
 	public static void main(String[] args) {
 		UnMix list = new UnMix();
-		list.message = new MyLinkedList();
 		list.decrypt();
 	}
 
+	/*******************************************************************
+	 * Method that decrypts the linked list of Nodes to the original linked
+	 * list of Nodes.
+	 *
+	 ******************************************************************/
 	public void decrypt() {
 
 		System.out.print("Enter the name of the file:\n\t");
@@ -43,9 +70,25 @@ public class UnMix implements IUnMix {
 		message.add(sc.nextLine()); // this messes up if there is a space 
 		sc.close();
 
-		System.out.println("Decypted message: " + UnMixUsingFile(fileName, message.toString()));
+		System.out.println("Decypted message: " + UnMixUsingFile(
+				fileName, message.toString()));
 	}
 
+	/*******************************************************************
+	 * Method that sets the original String message into a linked list.
+	 * 
+	 * @param mixedMessage the initial message to be sent into a linked 
+	 * list.
+	 ******************************************************************/
+	public void setMixedMessage(String mixedMessage) {
+		message.add(mixedMessage);
+	}
+
+	/*******************************************************************
+	 * Method that loads the text file into an ArrayList of Strings.
+	 * 
+	 * @param fileName name of file that will be opened.
+	 ******************************************************************/
 	public void load(String filename) {
 
 		try{
@@ -60,51 +103,95 @@ public class UnMix implements IUnMix {
 			setFileName(filename);
 			setCorrectFile(true);
 
-		} catch(Exception e) {
+		} catch(FileNotFoundException e) {
 			System.out.println("Error 404: File not found!");
 			System.out.print("Enter the name of the file:\n\t");
 		}	
 	}
 
+	/*******************************************************************
+	 * Getter method that gets the name of the file.
+	 * 
+	 * @return fileName name of the file.
+	 ******************************************************************/
 	public String getFileName() {
 		return fileName;
 	}
 
+	/*******************************************************************
+	 * Setter method that sets the name of the file.
+	 * 
+	 * @param fileName name of the file.
+	 ******************************************************************/
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 
+	/*******************************************************************
+	 * Getter method that checks to see if there exists a file with the
+	 * specified name the user enters.
+	 * 
+	 * @return correctFile returns true or false whether or not the file 
+	 * exists.
+	 ******************************************************************/
 	public boolean isCorrectFile() {
 		return correctFile;
 	}
 
+	/*******************************************************************
+	 * Setter method that sets whether a not a file was found or not.
+	 * 
+	 * @param correctFile boolean to set whether or not the file was found.
+	 ******************************************************************/
 	public void setCorrectFile(boolean correctFile) {
 		this.correctFile = correctFile;
 	}
 
-	@Override
+	/*******************************************************************
+	 * Setter method that sets whether a not a file was found or not.
+	 * 
+	 * @param fileName the name of the file that the commands are being 
+	 * retrieved from.
+	 * @param mixedMessage the message that this method will UnMix.
+	 * @return message the original message is returned.
+	 * @Override
+	 ******************************************************************/
 	public String UnMixUsingFile(String filename, String mixedMessage) {
-		
+
 		int count = redoCommands.size() - 1;
 		while (count >= 0) {
-			
+
 			String[] command = redoCommands.get(count).split("\\s+");
 
-			switch(command[0]) {
-			case "a":
-				int addIndex = Integer.parseInt(command[2]);
-				message.addAtIndex(command[1], addIndex); // blows up at this line for JUnit test
+			try {
+				switch(command[0]) {
+				case "a":
+					int addIndex = Integer.parseInt(command[2]);
+					message.addAtIndex(command[1], addIndex);
+					break;
+				case "r":
+					if (command.length < 3) {
+						int removeIndex = Integer.parseInt(command[1]);
+						message.deleteAfterIndex(removeIndex);
+					}
+					else {
+						int removeIndex = Integer.parseInt(command[2]);
+						message.deleteAfterIndex(removeIndex);
+					}
+					break;
+				default: System.out.println("An error occured reading the "
+						+ "file!");
 				break;
-			case "r":
-				int removeIndex = Integer.parseInt(command[2]);
-				message.deleteAfterIndex(command[1], removeIndex); // blows up at this line for JUnit test
-				break;
-			default: System.out.println("An error occured reading the file!");
-			break;
+				}
+				mixedMessage = message.toString(); // delete later
+				count--;
 			}
-			count--;
+			catch (IndexOutOfBoundsException e) {
+				System.out.println("Error: you typed the wrong file or "
+						+ "mixed up message!");
+				System.exit(0);
+			}
 		}
-
 		return message.toString();
 	}
 }
