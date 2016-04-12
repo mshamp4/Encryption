@@ -118,9 +118,6 @@ public class MyLinkedList {
 	 ******************************************************************/
 	public void add(String s) {
 
-		if (s.isEmpty())
-			throw new IllegalArgumentException();
-
 		int i = s.length();
 
 		/* this breaks the entire message backwards into single Strings to
@@ -197,10 +194,11 @@ public class MyLinkedList {
 
 		if (top.getNext().getData() == null) {
 			top.getNext().setData(s);
+			setCount(getCount() + 1);
 			return true;
 		}
 
-		for (int i = 0; i < index; i ++) { // changed 
+		for (int i = 0; i < index; i ++) {
 			temp = temp.getNext();
 		}
 
@@ -258,12 +256,19 @@ public class MyLinkedList {
 	 ******************************************************************/
 	public boolean deleteAfterIndex(int index) {
 
-		if (index < 0 || index > count)
+		if (index < 0 || index >= count)
 			throw new IndexOutOfBoundsException();
 
 		Node temp = top.getNext();
+		
+		if (top.getNext().getNext().getData().equals("tail")) {
+			top.setNext(temp.getNext());
+			tail.setPrevious(top);
+			setCount(getCount() - 1);
+			return true;	
+		}
 
-		for (int i = 0; i <= index; i++) // changed to equals not equals to
+		for (int i = 0; i <= index; i++) // changed this line
 			temp = temp.getNext();
 
 		temp.getPrevious().setNext(temp.getNext());
