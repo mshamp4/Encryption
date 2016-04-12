@@ -3,7 +3,7 @@ package project4;
 public class Node {
 	
 	private String data;
-	
+		
 	private Node next;
 	
 	private Node previous;
@@ -18,7 +18,7 @@ public class Node {
 		this.next = next;
 		this.previous = previous;
 	}
-
+	
 	public String getData() {
 		return data;
 	}
