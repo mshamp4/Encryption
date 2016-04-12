@@ -133,6 +133,8 @@ public class Mix implements IMix {
 				} catch (IndexOutOfBoundsException e) {
 					System.out.println("Error: Integer cannot exceed "
 							+ "message length");
+				} catch (NumberFormatException e) {
+					System.out.println("Error: integer is too large!");
 				}
 			}
 			break;
@@ -147,33 +149,37 @@ public class Mix implements IMix {
 			break;
 		case "c":
 			if (isValidCopy(command)) {
-				int startPos = Integer.parseInt(command[1]);
-				int endPos = Integer.parseInt(command[2]);
-				int clipNum = Integer.parseInt(command[3]);
 				try {
+					int startPos = Integer.parseInt(command[1]);
+					int endPos = Integer.parseInt(command[2]);
+					int clipNum = Integer.parseInt(command[3]);
 					message.copy(startPos, endPos, clipNum);
 				} catch (IndexOutOfBoundsException e) {
 					System.out.println("Error: Integer cannot exceed "
 							+ "message length");
+				} catch (NumberFormatException e) {
+					System.out.println("Error: integer is too large!");
 				} catch (IllegalArgumentException e) {
 					System.out.println("Error: You can only copy from 0 to "
 							+ (message.getCount() -1));
 				} catch (NullPointerException e) {
 					System.out.println("Error: A maximum of 1000 clipboards are allowed!");
-				}
+				} 
 			}
 			break;
 		case "p":
 			if (isValidPaste(command)) {
-				int index = Integer.parseInt(command[1]);
-				int clipNum = Integer.parseInt(command[2]);
 				try {
+					int index = Integer.parseInt(command[1]);
+					int clipNum = Integer.parseInt(command[2]);
 					message.paste(index, clipNum);
 				} catch (NullPointerException e) {
 					System.out.println("ClipBoard not found");
 				} catch (IndexOutOfBoundsException e) {
 					System.out.println("Error: Integer cannot exceed "
 							+ "message length");
+				} catch (NumberFormatException e) {
+					System.out.println("Error: integer is too large!");
 				}
 			}
 			break;
