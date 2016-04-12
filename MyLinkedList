@@ -280,6 +280,9 @@ public class MyLinkedList {
 
 		if (startPos > endPos)
 			throw new IllegalArgumentException();
+		
+		if (clipNum > 1000)
+			throw new NullPointerException();
 
 		Node temp = top;
 		CopyNode current = topClipBoard.getNext();
