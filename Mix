@@ -158,6 +158,8 @@ public class Mix implements IMix {
 				} catch (IllegalArgumentException e) {
 					System.out.println("Error: You can only copy from 0 to "
 							+ (message.getCount() -1));
+				} catch (NullPointerException e) {
+					System.out.println("Error: A maximum of 1000 clipboards are allowed!");
 				}
 			}
 			break;
