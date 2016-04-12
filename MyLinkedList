@@ -2,16 +2,37 @@ package project4;
 
 import java.util.ArrayList;
 
+/***********************************************************************
+ *
+ * This class is the double linked list with a top and a tail pointer. This
+ * class converts a String to a linked list of single String letters.
+ *
+ * @author Matthew Shampine
+ * @version 1.0
+ ***********************************************************************/
 public class MyLinkedList {
 
+	/** top pointer that points to the first Node in the linked list */ 
 	private Node top; 
 
+	/** tail pointer that points to the last Node in the linked list */ 
 	private Node tail;
 
+	/** top pointer that points to the first clipBoard in the single linked
+	 * list */ 
+	private CopyNode topClipBoard;
+
+	/** length of the linked list */ 
 	private int count;
 
+	/** ArrayList of undoCommands to get back to the original message */ 
 	private ArrayList<String> undoCommands;
 
+	/*******************************************************************
+	 * Linked list constructor that initializes all of the necessary 
+	 * fields to the appropriate values.
+	 *
+	 ******************************************************************/
 	public MyLinkedList() {
 		Node temp = new Node(null, null, null);
 		top = new Node("top", temp, null);
@@ -21,20 +42,56 @@ public class MyLinkedList {
 
 		setCount(0);
 		undoCommands = new ArrayList<String>();
+		createCopyNodes(); // creates 1000 clipboards
 	}
 
+	/*******************************************************************
+	 * Getter method that returns the length of the linked list.
+	 * 
+	 * @return count the length of the Nodes added together.
+	 ******************************************************************/
 	public int getCount() {
 		return count;
 	}
 
+	/*******************************************************************
+	 * Setter method that adds the count of each Node.
+	 * 
+	 * @param count number of Nodes to be added (at all times should be 1)
+	 ******************************************************************/
 	public void setCount(int count) {
 		this.count = count;
 	}
 
+	/*******************************************************************
+	 * Getter method that returns the ArrayList of undoCommands.
+	 * 
+	 * @return undoCommands all of the undoCommands would be returned.
+	 ******************************************************************/
 	public ArrayList<String> getUndoCommands() {
 		return undoCommands;
 	}
 
+	/*******************************************************************
+	 * Method that creates 0-1000 clipBoards which point to a null 
+	 * clipBoard.
+	 * 
+	 ******************************************************************/
+	public void createCopyNodes() {
+		topClipBoard = new CopyNode(-1, null, null);
+		for (int i = 1000; i >= 0; i--) {
+			CopyNode current = new CopyNode(i, topClipBoard.getNext(),
+					null);
+			topClipBoard.setNext(current);
+		}
+	}
+
+	/*******************************************************************
+	 * Method that initially creates the Nodes of the linked list. This 
+	 * method should only be used once when creating the first message.
+	 * 
+	 * @param s the String to store in each Node.
+	 ******************************************************************/
 	public void addAfterTop(String s) {
 
 		if (top.getNext().getData() == null) {
@@ -50,10 +107,24 @@ public class MyLinkedList {
 		temp.setPrevious(top);
 	}
 
+	/*******************************************************************
+	 * Method that sends over each letter of the entire String as a single
+	 * String. This method should only be used when first initially creating
+	 * the first message.
+	 * 
+	 * @param s the entire message the user enters.
+	 * @throws IllegalArgumentException if the String being added is empty
+	 * as you cannot add an empty message to a Node.
+	 ******************************************************************/
 	public void add(String s) {
+
+		if (s.isEmpty())
+			throw new IllegalArgumentException();
 
 		int i = s.length();
 
+		/* this breaks the entire message backwards into single Strings to
+		 * store into each Node */
 		while (i > 0) {
 			setCount(getCount() + 1);
 			addAfterTop(s.substring(i -1, i));
@@ -61,7 +132,20 @@ public class MyLinkedList {
 		}
 	}
 
+	/*******************************************************************
+	 * Method that inserts a new Node after the desired index that the user
+	 * chooses to add to.
+	 * 
+	 * @param s the single String to be added to the new Node.
+	 * @param index position where the new node is going to be added.
+	 * @throws IndexOutOfBoundsException if the user enters an index less or
+	 * greater then the length of the message.
+	 ******************************************************************/
 	public boolean addAfterIndex(String s, int index) {
+
+		if (index < 0 || index > count)
+			throw new IndexOutOfBoundsException();
+
 		Node curr = new Node(s, null, null);
 		Node temp = top.getNext();
 
@@ -80,7 +164,20 @@ public class MyLinkedList {
 		return true;
 	}
 
+	/*******************************************************************
+	 * Method that inserts a new Node AT the desired index that the user
+	 * chooses to add to. This method is used by the UnMix class only.
+	 * 
+	 * @param s the single String to be added to the new Node.
+	 * @param index position where the new node is going to be added.
+	 * @throws IndexOutOfBoundsException if the user enters an index less or
+	 * greater then the length of the message.
+	 ******************************************************************/
 	public boolean addAtIndex(String s, int index) {
+
+		if (index < 0 || index > count)
+			throw new IndexOutOfBoundsException();
+
 		Node curr = new Node(s, null, null);
 		Node temp = top.getNext();
 
@@ -89,26 +186,28 @@ public class MyLinkedList {
 			return true;
 		}
 
-		for (int i = 0; i < index; i ++) {
+		for (int i = 0; i < index; i ++) { // changed 
 			temp = temp.getNext();
 		}
 
-		try {
-			curr.setPrevious(temp.getPrevious());
-			temp.getPrevious().setNext(curr);
-			curr.setNext(temp);
-			temp.setPrevious(curr);
-		}
-		catch (NullPointerException e) {
-			System.out.println("Error: you typed the wrong file or mixed up message!");
-			System.exit(0);
-		}
+		curr.setPrevious(temp.getPrevious());
+		temp.getPrevious().setNext(curr);
+		curr.setNext(temp);
+		temp.setPrevious(curr);
 
 		setCount(getCount() + 1);
 
 		return true;
 	}
 
+	/*******************************************************************
+	 * Method that deletes all instances of the character that are found 
+	 * within the linked list.
+	 * 
+	 * @param s the single String to be deleted within the linked list.
+	 * @return boolean returns true if the message was modified or false
+	 * if nothing was changed.
+	 ******************************************************************/
 	public boolean delete(String s) {
 
 		if (top.getNext() == null)
@@ -134,26 +233,142 @@ public class MyLinkedList {
 		return true;
 	}
 
-	public boolean deleteAfterIndex(String s, int index) {
+	/*******************************************************************
+	 * Method that deletes a Node in the linked list. This method is used by
+	 * the UnMix class only.
+	 * 
+	 * @param index position where the Node will be deleted.
+	 * @throws IndexOutOfBoundsException if the user enters an index less or
+	 * greater then the length of the message.
+	 * @return boolean whether or not the paste was valid.
+	 ******************************************************************/
+	public boolean deleteAfterIndex(int index) {
+
+		if (index < 0 || index > count)
+			throw new IndexOutOfBoundsException();
+
 		Node temp = top.getNext();
 
-		try {
-			for (int i = 0; i <= index; i ++)
-				temp = temp.getNext();
+		for (int i = 0; i <= index; i++) // changed to equals not equals to
+			temp = temp.getNext();
 
-			temp.getPrevious().setNext(temp.getNext());
-			temp.getNext().setPrevious(temp.getPrevious());
+		temp.getPrevious().setNext(temp.getNext());
+		temp.getNext().setPrevious(temp.getPrevious());
 
-			setCount(getCount() - 1);
-		}
-		catch (NullPointerException e) {
-			System.out.println("Error: you typed the wrong file or mixed up message!");
-			System.exit(0);
-		}
+		setCount(getCount() - 1);
 
 		return true;
 	}
 
+	/*******************************************************************
+	 * Method that copy's a double linked list to a specific clipBoard of 
+	 * CopyNodes.
+	 * 
+	 * @param startPos where the message is first copied in the linked list.
+	 * @param endPos where the message is done copying from.
+	 * @param clipNum what clipBoard the user wants to save from the copy.
+	 * @throws IndexOutOfBoundsException if the user enters an index less or
+	 * greater then the length of the message.
+	 * @throws IllegalArgumentException the user can only copy forwards and 
+	 * cannot copy backwards.
+	 * @return boolean whether or not the copy was valid.
+	 ******************************************************************/
+	public boolean copy(int startPos, int endPos, int clipNum) {
+
+		if (startPos < 0 || endPos >= count)
+			throw new IndexOutOfBoundsException();
+
+		if (startPos > endPos)
+			throw new IllegalArgumentException();
+
+		Node temp = top;
+		CopyNode current = topClipBoard.getNext();
+
+		for (int i = 0; i < clipNum; i++)
+			current = current.getNext();
+
+		for (int i = 0; i <= startPos; i ++) {
+			temp = temp.getNext();
+			if (i == startPos) {
+				int count = startPos;
+				while (count <= endPos) {
+
+					if (count == startPos) {
+						current.setClipBoard(new Node(temp.getData(), 
+								null, null));
+					}
+					else {
+						current.setClipBoard((new Node(temp.getData(), 
+								current.getClipBoard(), null)));
+						current.getClipBoard().getNext().setPrevious(
+								current.getClipBoard());
+					}
+					temp = temp.getNext();
+					count++;
+				}
+
+			}
+		}
+		return true;
+	}
+
+	/*******************************************************************
+	 * Method that returns a String from a specific clipBoard.
+	 * 
+	 * @param clipNum the clipBoard number that holds what the user copied 
+	 * to.
+	 * @return message returns a String that was held in the specific 
+	 * clipBoard.
+	 ******************************************************************/
+	public String toString(int clipNum) {
+
+		String message = "";
+
+		CopyNode temp = topClipBoard.getNext();
+
+		for (int i = 0; i < clipNum; i++)
+			temp = temp.getNext();
+
+		Node temp2 = temp.getClipBoard();
+
+		while (temp2 != null) {
+			message += temp2.getData();
+			temp2 = temp2.getNext();
+		}
+		return message;
+	}
+
+	/*******************************************************************
+	 * Method that adds all of the Nodes to the linked list message.
+	 * 
+	 * @param index where in the linked list the clipBoard will paste to.
+	 * @param clipNum the specific clipBoard that will be pasted. 
+	 * @return boolean whether or not the paste was valid.
+	 ******************************************************************/
+	public boolean paste(int index, int clipNum) {
+
+		String paste = toString(clipNum);
+
+		if (paste.isEmpty() || index < 0 || index > 1000)
+			throw new NullPointerException();
+
+		int i = paste.length();
+
+		while (i > 0) {
+			addAfterIndex(paste.substring(i -1, i), index++);
+			i--;
+		}
+		return true;
+	}
+
+	/*******************************************************************
+	 * Method that searches through the entire linked list to see if the 
+	 * String was found in each Node.
+	 * 
+	 * @param s the String that is is trying to find in the linked list.
+	 * @return boolean returns true or false if the String is found in 
+	 * linked list.
+	 ******************************************************************/
 	public boolean find(String s) {
 
 		Node temp = top.getNext();
@@ -162,10 +377,14 @@ public class MyLinkedList {
 				return true;
 			temp = temp.getNext();
 		}
-
 		return false;
 	}
 
+	/*******************************************************************
+	 * toString method that converts the linked list into a String.
+	 * 
+	 * @return message the message from the linked list in String format.
+	 ******************************************************************/
 	public String toString() {
 
 		String message = "";
@@ -175,15 +394,6 @@ public class MyLinkedList {
 			message += temp.getData();
 			temp = temp.getNext();
 		}
-
 		return message;
-	}
-
-	public static void main(String[] args) {
-		MyLinkedList list = new MyLinkedList();
-
-		list.add("Hello");
-		list.delete("H");
-		System.out.print(list.toString());
 	}
 }
