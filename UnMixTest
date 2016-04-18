@@ -1,0 +1,190 @@
+package project4;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class UnMixTest {
+	
+	@Test 
+	public void testUndoProcessCommand1() {
+		String userMessage = "Tahis is a secret message";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test1");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test1", userMessage);
+		assertEquals(original, "This is a secret message");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand2() {
+		String userMessage = "ThlXiis is Ya secret messageb";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test2");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test2", userMessage);
+		assertEquals(original, "This is a secret message");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand3() {
+		String userMessage = "eo is is a super secre message!";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test3");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test3", userMessage);
+		assertEquals(original, "hello this is a super secret message!");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand4() {
+		String userMessage = "han w a eage ha  ea ecre";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test4");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test4", userMessage);
+		assertEquals(original, "this is a message that is a secret");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand5() {
+		String userMessage = "hellohellohellohello";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test5");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test5", userMessage);
+		assertEquals(original, "hello");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand6() {
+		String userMessage = "0h0 up h ea0he a vlo ! oa be fu0hz";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test6");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test6", userMessage);
+		assertEquals(original, "mixing up this message a lot is gonna "
+				+ "be fun");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand7() {
+		String userMessage = "message aebmp number ";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test7");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test7", userMessage);
+		assertEquals(original, "message attempt number 1");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand8() {
+		String userMessage = "mag q ry numagq ry numbr 4ombr 4o";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test8");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test8", userMessage);
+		assertEquals(original, "message try number 34");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand9() {
+		String userMessage = "fae e ecefeae ecret meage recret meage";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test9");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test9", userMessage);
+		assertEquals(original, "fake secret message");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand10() {
+		String userMessage = "xnl g  Yh5nl nclud Xgvryhng";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test10");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test10", userMessage);
+		assertEquals(original, "Final message test. This includes "
+				+ "everything.");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand11() {
+		String userMessage = "iQn rx  cr in   i hi rk";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test11");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test11", userMessage);
+		assertEquals(original, "Testing for a secret message to see if "
+				+ "this works");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand12() {
+		String userMessage = "xz";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test12");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test12", userMessage);
+		assertEquals(original, "Hello");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand13() {
+		String userMessage = "";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test13");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test13", userMessage);
+		assertEquals(original, "Hello");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand14() {
+		String userMessage = "Scrt mssag";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test14");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test14", userMessage);
+		assertEquals(original, "Secret message");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand15() {
+		String userMessage = "HxWlloHWl";
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("test15");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("test15", userMessage);
+		assertEquals(original, "Hello");
+	}
+	
+	@Test 
+	public void testUndoProcessCommand16() {
+		Mix message = new Mix();
+		message.setInitialMessage("This is a secret message");
+		String userMessage = message.processCommand("a a 0");
+		message.processCommand("s testIt");
+
+		UnMix unMessage = new UnMix();
+		unMessage.setCorrectFile(true);
+		unMessage.load("testIt");
+		unMessage.setMixedMessage(userMessage);
+		String original = unMessage.UnMixUsingFile("testIt", userMessage);
+		assertEquals(original, "This is a secret message");
+	}
+}
