@@ -1,0 +1,262 @@
+package project4;
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class MixTest {
+
+	@Test 
+	public void testProcessCommand1() {
+		Mix message = new Mix();
+		message.setInitialMessage("This is a secret message");
+		String userMessage = message.processCommand("a a 0");
+		message.processCommand("s test1");
+		assertEquals("Tahis is a secret message", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand2() {
+		Mix message = new Mix();
+		message.setInitialMessage("This is a secret message");
+		message.processCommand("a X 1");
+		message.processCommand("a Y 8");
+		message.processCommand("a i 3");
+		message.processCommand("a l 1");
+		String userMessage = message.processCommand("a b 27");
+		message.processCommand("s test2");
+		assertEquals("ThlXiis is Ya secret messageb", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand3() {
+		Mix message = new Mix();
+		message.setInitialMessage("hello this is a super secret message!");
+		message.processCommand("r l");
+		message.processCommand("r t");
+		String userMessage = message.processCommand("r h");
+		message.processCommand("s test3");
+		assertEquals("eo is is a super secre message!", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand4() {
+		Mix message = new Mix();
+		message.setInitialMessage("this is a message that is a secret");
+		message.processCommand("r t");
+		message.processCommand("r i");
+		message.processCommand("a a 0");
+		message.processCommand("a w 3");
+		message.processCommand("r s");
+		message.processCommand("a e 16");
+		message.processCommand("a n 1");
+		String userMessage = message.processCommand("r m");
+		message.processCommand("s test4");
+		assertEquals("han w a eage ha  ea ecre", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand5() {
+		Mix message = new Mix();
+		message.setInitialMessage("hello");
+		message.processCommand("c 0 4 1");
+		message.processCommand("p 4 1");
+		message.processCommand("c 0 9 2");
+		String userMessage = message.processCommand("p 9 2");
+		message.processCommand("s test5");
+		assertEquals("hellohellohellohello", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand6() {
+		Mix message = new Mix();
+		message.setInitialMessage("mixing up this message a lot is gonna "
+				+ "be fun");
+		message.processCommand("r t");
+		message.processCommand("a 0 1");
+		message.processCommand("a A 1");
+		message.processCommand("a v 25");
+		message.processCommand("a z 44");
+		message.processCommand("r g");
+		message.processCommand("a h 6");
+		message.processCommand("c 0 7 1");
+		message.processCommand("p 41 1");
+		message.processCommand("p 20 1");
+		message.processCommand("c 0 0 1");
+		message.processCommand("p 14 1");
+		message.processCommand("c 22 27 4");
+		message.processCommand("p 7 4");
+		message.processCommand("r i");
+		message.processCommand("r A");
+		message.processCommand("r m");
+		message.processCommand("r n");
+		message.processCommand("r x");
+		message.processCommand("r s");
+		String userMessage = message.processCommand("a ! 20");
+		message.processCommand("s test6");
+		assertEquals("0h0 up h ea0he a vlo ! oa be fu0hz", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand7() {
+		Mix message = new Mix();
+		message.setInitialMessage("message attempt number 1");
+		message.processCommand("r 1");
+		message.processCommand("r t");
+		String userMessage = message.processCommand("a b 9");
+		message.processCommand("s test7");
+		assertEquals("message aebmp number ", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand8() {
+		Mix message = new Mix();
+		message.setInitialMessage("message try number 34");
+		message.processCommand("a e 20");
+		message.processCommand("a o 20");
+		message.processCommand("a q 5");
+		message.processCommand("r s");
+		message.processCommand("r e");
+		message.processCommand("r t");
+		message.processCommand("c 0 16 6");
+		message.processCommand("p 9 6");
+		message.processCommand("r 3");
+		message.processCommand("c 14 14 1");
+		String userMessage = message.processCommand("p 2 1");
+		message.processCommand("s test8");
+		assertEquals("mag q ry numagq ry numbr 4ombr 4o", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand9() {
+		Mix message = new Mix();
+		message.setInitialMessage("fake secret message");
+		message.processCommand("r s");
+		message.processCommand("r k");
+		message.processCommand("c 2 6 1");
+		message.processCommand("c 2 3 2");
+		message.processCommand("c 0 14 3");
+		message.processCommand("c 14 14 4");
+		message.processCommand("p 3 1");
+		message.processCommand("p 7 2");
+		message.processCommand("p 8 3");
+		String userMessage = message.processCommand("p 9 4");
+		message.processCommand("s test9");
+		assertEquals("fae e ecefeae ecret meage recret meage", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand10() {
+		Mix message = new Mix();
+		message.setInitialMessage("Final message test. This includes "
+				+ "everything.");
+		message.processCommand("c 0 4 1");
+		message.processCommand("p 23 1");
+		message.processCommand("r t");
+		message.processCommand("r T");
+		message.processCommand("c 6 12 2");
+		message.processCommand("p 35 2");
+		message.processCommand("r s");
+		message.processCommand("r e");
+		message.processCommand("r m");
+		message.processCommand("r i");
+		message.processCommand("a x 0");
+		message.processCommand("a X 23");
+		message.processCommand("r a");
+		message.processCommand("r .");
+		message.processCommand("a 5 9");
+		message.processCommand("r F");
+		String userMessage = message.processCommand("a Y 6");
+		message.processCommand("s test10");
+		assertEquals("xnl g  Yh5nl nclud Xgvryhng", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand11() {
+		Mix message = new Mix();
+		message.setInitialMessage("Testing for a secret message to see if "
+				+ "this works");
+		message.processCommand("r t");
+		message.processCommand("r a ");
+		message.processCommand("c 0 5 1");
+		message.processCommand("p 18 1");
+		message.processCommand("r s");
+		message.processCommand("r m");
+		message.processCommand("r T");
+		message.processCommand("a b 0");
+		message.processCommand("a e 8");
+		message.processCommand("a x 8");
+		message.processCommand("r f");
+		message.processCommand("r e");
+		message.processCommand("r w");
+		message.processCommand("r g");
+		message.processCommand("a Q 1");
+		message.processCommand("a o 26");
+		message.processCommand("r o");
+		String userMessage = message.processCommand("r b");
+		message.processCommand("s test11");
+		assertEquals("iQn rx  cr in   i hi rk", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand12() {
+		Mix message = new Mix();
+		message.setInitialMessage("Hello");
+		message.processCommand("r l");
+		message.processCommand("r H");
+		message.processCommand("r e");
+		message.processCommand("r o");
+		message.processCommand("a x 0");
+		String userMessage = message.processCommand("a z 0");
+		message.processCommand("s test12");
+		assertEquals("xz", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand13() {
+		Mix message = new Mix();
+		message.setInitialMessage("Hello");
+		message.processCommand("r l");
+		message.processCommand("r H");
+		message.processCommand("r e");
+		String userMessage = message.processCommand("r o");
+		message.processCommand("s test13");
+		assertEquals("", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand14() {
+		Mix message = new Mix();
+		message.setInitialMessage("Secret message");
+		String userMessage = message.processCommand("r e");
+		message.processCommand("s test14");
+		assertEquals("Scrt mssag", userMessage);	
+	}
+	
+	@Test 
+	public void testProcessCommand15() { // bad command inputs
+		Mix message = new Mix();
+		message.setInitialMessage("Hello");
+		message.processCommand("r L");
+		message.processCommand("r e");
+		message.processCommand("r e");
+		message.processCommand("r ");
+		message.processCommand("	r		l");
+		message.processCommand("a e -1");
+		message.processCommand("a X 6");
+		message.processCommand("a ");
+		message.processCommand("a p");
+		message.processCommand("a	 W 		0");
+		message.processCommand("c 0 1 1001");
+		message.processCommand("c 1 0 1");
+		message.processCommand("c -1 1 2");
+		message.processCommand("c 1 15 3");
+		message.processCommand("c 0 2 1");
+		message.processCommand("p -1 1");
+		message.processCommand("p 10 1");
+		message.processCommand("p 0 10");
+		message.processCommand("p 4 1");
+		String userMessage = message.processCommand("a x 0");
+		message.processCommand("s test15");
+		assertEquals("HxWlloHWl", userMessage);	
+	}
+}
